@@ -28,6 +28,9 @@ class LoginVC: UIViewController {
     @IBAction func loginButtonPressed(_ sender: Any) {
         
     }
+    @IBAction func createAccountButtonPressed(_ sender: Any) {
+        performSegue(withIdentifier: "CreateAccountVCSegue", sender: nil)
+    }
     
     
 
