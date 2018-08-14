@@ -257,7 +257,7 @@
                                     </view>
                                 </subviews>
                             </stackView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9aZ-sN-9qF">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9aZ-sN-9qF" customClass="RoundedButton" customModule="Smack" customModuleProvider="target">
                                 <rect key="frame" x="37.5" y="297.5" width="300" height="45"/>
                                 <color key="backgroundColor" red="0.26666666666666666" green="0.62352941176470589" blue="0.81176470588235294" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
@@ -337,7 +337,6 @@
                         <viewLayoutGuide key="safeArea" id="5vn-Km-6HI"/>
                     </view>
                     <connections>
-                        <outlet property="loginButton" destination="9aZ-sN-9qF" id="M3n-qG-Flx"/>
                         <segue destination="PoB-S2-4j6" kind="show" identifier="CreateAccountVCSegue" id="uC0-FE-Gbv"/>
                     </connections>
                 </viewController>
@@ -441,6 +440,9 @@
                                         <state key="normal" title="Choose an avatar">
                                             <color key="titleColor" red="0.2666666667" green="0.62352941179999999" blue="0.81176470590000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
+                                        <connections>
+                                            <action selector="chooseAvatarPressed:" destination="PoB-S2-4j6" eventType="touchUpInside" id="dfA-Bp-t3G"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bbl-li-LWl">
                                         <rect key="frame" x="0.0" y="137" width="215" height="17"/>
@@ -452,10 +454,13 @@
                                         <state key="normal" title="Generate a background color">
                                             <color key="titleColor" red="0.2666666667" green="0.62352941179999999" blue="0.81176470590000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
+                                        <connections>
+                                            <action selector="chooseBackgroundColorPressed:" destination="PoB-S2-4j6" eventType="touchUpInside" id="klm-0R-WYn"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                             </stackView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sgj-Mc-xV9">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sgj-Mc-xV9" customClass="RoundedButton" customModule="Smack" customModuleProvider="target">
                                 <rect key="frame" x="37" y="551" width="300" height="45"/>
                                 <color key="backgroundColor" red="0.2666666667" green="0.62352941179999999" blue="0.81176470590000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
@@ -466,6 +471,7 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
+                                    <action selector="createAccountButtonPressed:" destination="PoB-S2-4j6" eventType="touchUpInside" id="cRk-aQ-R6v"/>
                                     <action selector="loginButtonPressed:" destination="ik8-dH-4XM" eventType="touchUpInside" id="5wT-eq-Vgy"/>
                                 </connections>
                             </button>
@@ -487,7 +493,10 @@
                         <viewLayoutGuide key="safeArea" id="SvI-ic-KJN"/>
                     </view>
                     <connections>
-                        <outlet property="createAccountButton" destination="Sgj-Mc-xV9" id="4sS-ly-7hr"/>
+                        <outlet property="avatarImage" destination="yNX-2V-Cu2" id="5uW-Cx-vcV"/>
+                        <outlet property="emailTextField" destination="d9k-ao-UGC" id="e7R-a5-in7"/>
+                        <outlet property="passwordTextField" destination="BFj-gd-Jz3" id="ctM-Ll-vI9"/>
+                        <outlet property="userNameTextField" destination="1XB-Yu-Kxm" id="bl5-Fr-P4H"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="og4-RQ-RM8" userLabel="First Responder" sceneMemberID="firstResponder"/>
