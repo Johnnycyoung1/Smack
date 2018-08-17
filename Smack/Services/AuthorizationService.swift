@@ -8,8 +8,10 @@
 
 import Foundation
 import Alamofire
+import SwiftyJSON
 
 class AuthorizationService {
+    
     static let shared = AuthorizationService()
     
     let defaults = UserDefaults.standard
@@ -38,11 +40,16 @@ class AuthorizationService {
             defaults.set(newValue, forKey: userEmail)
         }
     }
+}
+
+extension AuthorizationService {
     
     func registerUser(email: String, password: String, completion: @escaping(_ Success: Bool) -> ()) {
         let userEmail = email.lowercased()
-        let header = ["Content-Type": "application/json; charset=utf-8"]
-        let body: [String: Any] = ["email": userEmail, "password": password]
+        let body: [String: Any] = [
+            "email": userEmail,
+            "password": password
+        ]
         
         Alamofire.request(registerURL, method: .post, parameters: body, encoding: JSONEncoding.default, headers: header).responseString { (response) in
             
@@ -50,14 +57,74 @@ class AuthorizationService {
             case .success:
                 completion(true)
             case .failure:
-                guard let error = response.result.error else {return}
                 completion(false)
-                debugPrint("Error: \(error)")
+                debugPrint("Error: \(response.result.error as Any)  ")
             }
         }
     }
     
+    func loginUser(email: String, password: String, completion: @escaping (_ Success: Bool) -> ()) {
+        let userEmail = email.lowercased()
+        let body : [String: Any] = [
+            "email": userEmail,
+            "password": password
+        ]
+        
+        Alamofire.request(loggedInURL, method: .post, parameters: body, encoding: JSONEncoding.default, headers: header).responseJSON { (response) in
+            
+            switch response.result {
+            case .success:
+                guard let value = response.result.value else { return }
+                let loginJSON = JSON(value)
+                self.parseLogin(json: loginJSON)
+                self.isLoggedIn = true
+                completion(true)
+            case .failure:
+                completion(false)
+                debugPrint("Error : \(response.result.error as Any)")
+            }
+        }
+    }
     
+    func createUser(name: String, email: String, avatarName: String, avatarColor: String, completion: @escaping (_ Success: Bool) -> ()) {
+        let userEmail = email.lowercased()
+        let body : [String: Any] = [
+            "name": name,
+            "email": userEmail,
+            "avatarName": avatarName,
+            "avatarColor": avatarColor
+        ]
+        
+        Alamofire.request(addUserURL, method: .post, parameters: body, encoding: JSONEncoding.default, headers: addUserHeader).responseJSON { (response) in
+            
+            switch response.result {
+            case .success:
+                guard let value = response.result.value else { return }
+                let createUserJSON = JSON(value)
+                self.parseCreateUser(json: createUserJSON)
+                completion(true)
+            case .failure:
+                completion(false)
+                debugPrint("Error : \(response.result.error as Any)")
+            }
+        }
+    }
+    
+    func parseLogin(json: JSON) {
+        guard let user = json["user"].string else { return }
+        let token = json["token"].stringValue
+        email = user
+        authorizationToken = token
+    }
+    
+    func parseCreateUser(json: JSON) {
+        guard let userID = json["_id"].string else { return }
+        let userName = json["name"].stringValue
+        let userEmail = json["email"].stringValue
+        let avatarName = json["avatarName"].stringValue
+        let avatarColor = json["avatarColor"].stringValue
+        UserDataService.shared.setUserData(id: userID, name: userName, email: userEmail, avatarName: avatarName, avatarColor: avatarColor)
+    }
     
     
 }

@@ -15,6 +15,9 @@ class CreateAccountVC: UIViewController {
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var avatarImage: UIImageView!
     
+    var avatarName = "profileDefault"
+    var avatarColor = "[0.5, 0.5, 0.5, 1]"
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -32,12 +35,34 @@ class CreateAccountVC: UIViewController {
     }
     
     @IBAction func createAccountButtonPressed(_ sender: Any) {
-        if emailTextField.text != "" && passwordTextField.text != "" {
-            guard let userEmail = emailTextField.text, let userPassword = passwordTextField.text else { return }
+        createNewAccount()
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+        super.touchesBegan(touches, with: event)
+    }
+}
+
+extension CreateAccountVC {
+    
+    func createNewAccount() {
+        if (userNameTextField.text != "" && emailTextField.text != "" && passwordTextField.text != "") {
+            guard let userName = userNameTextField.text, let userEmail = emailTextField.text, let userPassword = passwordTextField.text else { return }
+            
             AuthorizationService.shared.registerUser(email: userEmail, password: userPassword) { (success) in
-                
                 if success {
-                    print("Successfully Registered")
+                    AuthorizationService.shared.loginUser(email: userEmail, password: userPassword, completion: { (success) in
+                        if success {
+                            AuthorizationService.shared.createUser(name: userName, email: userEmail, avatarName: self.avatarName, avatarColor: self.avatarColor, completion: { (success) in
+                                if success {
+                                    self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
+                                } else {
+                                    debugPrint("Unable to create new user")
+                                }})
+                        } else {
+                            debugPrint("Log-In error")
+                        }})
                 } else {
                     self.createdAccountErrorAlert()
                     debugPrint("Unable to register new user")
@@ -46,11 +71,6 @@ class CreateAccountVC: UIViewController {
         } else {
             emptyTextFieldAlert()
         }
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        view.endEditing(true)
-        super.touchesBegan(touches, with: event)
     }
     
     func emptyTextFieldAlert() {
@@ -67,7 +87,7 @@ class CreateAccountVC: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
-    
-    
-    
 }
+    
+    
+
